@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Display Answers</title>
+</head>
+<body>
+
+<div style="margin: 20px;">
+  <h2>Display Answers</h2>
+  <div id="answersContainer"></div>
+</div>
+
+<script>
+fetch('answers.json')
+  .then(response => response.json())
+  .then(data => {
+    const answersContainer = document.getElementById('answersContainer');
+    for (const key in data) {
+      const label = document.createElement('label');
+      label.textContent = `${key}: `;
+      const value = document.createElement('span');
+      
+      if (Number.isInteger(data[key])) {
+        value.textContent = `${data[key]} (Number)`;
+      } else {
+        value.textContent = data[key];
+      }
+      
+      answersContainer.appendChild(label);
+      answersContainer.appendChild(value);
+      answersContainer.appendChild(document.createElement('br'));
+    }
+  })
+  .catch(error => console.error('Error loading JSON:', error));
+</script>
+
+</body>
+</html>
+
+<!--
+
+ChatGPT:    In this HTML file, we're using the fetch API to load the answers.json file. 
+            Once the JSON data is loaded, we loop through each key-value pair in the JSON object. 
+            For each pair, we create a label element to display the key and a span element to display the value. 
+            We also perform a check to determine if the value is an integer, and if so, we indicate its data type.
+            
+            When you open this HTML file in a web browser, it will load and display the JSON data from the answers.json f
+            ile with appropriate labels and data type formatting. 
+            Make sure that the answers.json file is in the same directory as this HTML file.
+
+-->
