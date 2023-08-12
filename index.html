@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sample Questions</title>
+</head>
+<body>
+
+<div style="margin: 20px;">
+  <h2>Sample Questions</h2>
+  <form id="answersForm">
+    <label for="question1">Question 1: What is your favorite color?</label><br>
+    <input type="text" id="question1" name="question1"><br><br>
+
+    <label for="question2">Question 2: What is your age?</label><br>
+    <input type="number" id="question2" name="question2"><br><br>
+
+    <label for="question3">Question 3: What is your favorite animal?</label><br>
+    <input type="text" id="question3" name="question3"><br><br>
+
+    <button type="button" onclick="saveAnswers()">Submit</button>
+  </form>
+</div>
+
+<script>
+function saveAnswers() {
+  const answers = {
+    question1: document.getElementById("question1").value,
+    question2: parseInt(document.getElementById("question2").value),
+    question3: document.getElementById("question3").value
+  };
+
+  const data = JSON.stringify(answers, null, 2);
+  
+  const blob = new Blob([data], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'answers.json';
+  a.click();
+}
+</script>
+
+</body>
+</html>
