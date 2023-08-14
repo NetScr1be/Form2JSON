@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sample Questions & Answers</title>
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+</style>
+</head>
+<body>
+
+<div style="margin: 20px;">
+  <h2>Sample Questions & Answers</h2>
+  <form id="answersForm">
+    <label for="question1">Question 1: What is your favorite color?</label><br>
+    <input type="text" id="question1" name="question1"><br><br>
+
+    <label for="question2">Question 2: What is your age?</label><br>
+    <input type="number" id="question2" name="question2"><br><br>
+
+    <label for="question3">Question 3: What is your favorite animal?</label><br>
+    <input type="text" id="question3" name="question3"><br><br>
+
+    <button type="button" onclick="addAnswer()">Add Answer</button>
+  </form>
+
+  <h3>Answers</h3>
+  <table id="answersTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Question 1</th>
+        <th>Question 2</th>
+        <th>Question 3</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="answersBody"></tbody>
+  </table>
+
+  <div>
+    <button onclick="downloadJSON()">Download JSON</button>
+    <button onclick="downloadCSV()">Download CSV</button>
+  </div>
+</div>
+
+<script>
+const answers = [];
+
+function addAnswer() {
+  const answer = {
+    question1: document.getElementById("question1").value,
+    question2: parseInt(document.getElementById("question2").value),
+    question3: document.getElementById("question3").value
+  };
+  
+  answers.push(answer);
+  clearForm();
+  displayAnswers();
+}
+
+function clearForm() {
+  document.getElementById("question1").value = "";
+  document.getElementById("question2").value = "";
+  document.getElementById("question3").value = "";
+}
+
+function displayAnswers() {
+  const answersBody = document.getElementById("answersBody");
+  answersBody.innerHTML = "";
+
+  answers.forEach((answer, index) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${answer.question1}</td>
+      <td>${answer.question2}</td>
+      <td>${answer.question3}</td>
+      <td>
+        <button onclick="editAnswer(${index})">Edit</button>
+        <button onclick="deleteAnswer(${index})">Delete</button>
+      </td>
+    `;
+    answersBody.appendChild(row);
+  });
+}
+
+function editAnswer(index) {
+  const answer = answers[index];
+  document.getElementById("question1").value = answer.question1;
+  document.getElementById("question2").value = answer.question2;
+  document.getElementById("question3").value = answer.question3;
+  answers.splice(index, 1);
+  displayAnswers();
+}
+
+function deleteAnswer(index) {
+  answers.splice(index, 1);
+  displayAnswers();
+}
+
+function downloadJSON() {
+  const data = JSON.stringify(answers, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'answers.json';
+  a.click();
+}
+
+function downloadCSV() {
+  const csvContent = [
+    "ID,Question 1,Question 2,Question 3"
+  ];
+  
+  answers.forEach((answer, index) => {
+    csvContent.push(`${index + 1},"${answer.question1}","${answer.question2}","${answer.question3}"`);
+  });
+
+  const csvData = csvContent.join('\n');
+  const blob = new Blob([csvData], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'answers.csv';
+  a.click();
+}
+</script>
+
+</body>
+</html>
